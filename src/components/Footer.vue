@@ -8,7 +8,7 @@
         <a href="#" class="hover:underline transition-all underline-offset-4">Wholesale</a>
         <a href="#" class="hover:underline transition-all underline-offset-4">Contact</a>
       </div>
-      <div class="text-stone-400 text-sm">© 2024 WabiSabi. Handcrafted with intention.</div>
+      <div class="text-stone-400 text-sm">© 2026 WabiSabi. Handcrafted with intention.</div>
     </div>
   </footer>
 </template>
