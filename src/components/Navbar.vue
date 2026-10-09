@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ShoppingBag, Menu, X, User, LogOut } from 'lucide-vue-next'
 import { useCart } from '../store/cart'
@@ -33,6 +33,31 @@ const goHome = () => {
   }
 }
 
+// Style for each link in the mobile menu: green when hovered/tapped, light green for the current page
+const linkBase = 'menu-item block text-lg font-bold px-5 py-3 rounded-2xl transition-all duration-300 ease-out active:scale-95'
+const linkClass = (path) => [
+  linkBase,
+  route.path === path
+    ? 'bg-wabi-moss/10 text-wabi-moss'
+    : 'text-stone-800 hover:bg-wabi-moss hover:text-white active:bg-wabi-moss active:text-white'
+]
+
+// Stop the page behind the menu from scrolling while it is open
+watch(isMenuOpen, (open) => {
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
+// If the window becomes wide (e.g. phone rotated), close the mobile menu
+const wide = window.matchMedia('(min-width: 768px)')
+const onWide = (e) => {
+  if (e.matches) closeMenu()
+}
+onMounted(() => wide.addEventListener('change', onWide))
+onUnmounted(() => {
+  wide.removeEventListener('change', onWide)
+  document.body.style.overflow = ''
+})
+
 const requestLogout = () => {
   isAccountOpen.value = false
   closeMenu()
@@ -54,16 +79,16 @@ const confirmLogout = () => {
     </router-link>
 
     <div class="hidden md:flex items-center gap-8 font-medium text-stone-600">
-        <router-link to="/Bakery-Website/" @click="goHome" class="hover:text-wabi-moss transition-colors">
+        <router-link to="/Bakery-Website/" @click="goHome" class="hover:text-wabi-moss transition-colors duration-300">
             Home
         </router-link>
-        <router-link to="/Bakery-Website/shop" class="hover:text-wabi-moss transition-colors">
+        <router-link to="/Bakery-Website/shop" class="hover:text-wabi-moss transition-colors duration-300">
             Order Now
         </router-link>
-        <router-link to="/Bakery-Website/ingredients" class="hover:text-wabi-moss transition-colors">
+        <router-link to="/Bakery-Website/ingredients" class="hover:text-wabi-moss transition-colors duration-300">
             Our Ingredients
         </router-link>
-        <router-link to="/Bakery-Website/reviews" class="hover:text-wabi-moss transition-colors">
+        <router-link to="/Bakery-Website/reviews" class="hover:text-wabi-moss transition-colors duration-300">
             Reviews
         </router-link>
     </div>
@@ -115,31 +140,47 @@ const confirmLogout = () => {
       </button>
     </div>
 
-    <!-- Mobile Dropdown List -->
-    <transition name="slide">
-      <div v-if="isMenuOpen" class="absolute top-[4.5rem] left-0 w-full max-h-[calc(100dvh-7rem)] overflow-y-auto bg-white/95 backdrop-blur-lg rounded-3xl border border-stone-200 shadow-xl p-4 flex flex-col gap-1 md:hidden z-40">
-        <router-link @click="goHome" to="/Bakery-Website/" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Home</router-link>
-        <router-link @click="closeMenu" to="/Bakery-Website/shop" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Order Now</router-link>
-        <router-link @click="closeMenu" to="/Bakery-Website/ingredients" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Our Ingredients</router-link>
-        <router-link @click="closeMenu" to="/Bakery-Website/reviews" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Reviews</router-link>
-        <hr class="border-stone-100 my-2" />
+    <!-- Mobile menu: centered on the screen. Teleport puts it on <body> so it is
+         positioned against the whole screen, not the small navbar. -->
+    <Teleport to="body">
+      <transition name="menu">
+        <div
+          v-if="isMenuOpen"
+          class="fixed inset-0 z-40 md:hidden flex items-center justify-center p-6 bg-stone-900/30 backdrop-blur-sm"
+          @click.self="closeMenu">
+          <div class="menu-panel w-full max-w-sm max-h-[calc(100dvh-10rem)] overflow-y-auto bg-white rounded-[2rem] shadow-2xl p-4 flex flex-col gap-1">
+            <router-link @click="goHome" to="/Bakery-Website/" :class="linkClass('/Bakery-Website/')">Home</router-link>
+            <router-link @click="closeMenu" to="/Bakery-Website/shop" :class="linkClass('/Bakery-Website/shop')">Order Now</router-link>
+            <router-link @click="closeMenu" to="/Bakery-Website/ingredients" :class="linkClass('/Bakery-Website/ingredients')">Our Ingredients</router-link>
+            <router-link @click="closeMenu" to="/Bakery-Website/reviews" :class="linkClass('/Bakery-Website/reviews')">Reviews</router-link>
+            <hr class="menu-item border-stone-100 my-2" />
 
-        <template v-if="!isLoggedIn">
-          <router-link @click="closeMenu" to="/Bakery-Website/login" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Login</router-link>
-          <router-link @click="closeMenu" to="/Bakery-Website/register" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Register</router-link>
-        </template>
-        <template v-else>
-          <router-link @click="closeMenu" to="/Bakery-Website/profile" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Profile</router-link>
-          <button @click="requestLogout" class="text-left text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-red-50 hover:text-red-500 active:scale-95">Logout</button>
-        </template>
+            <template v-if="!isLoggedIn">
+              <router-link @click="closeMenu" to="/Bakery-Website/login" :class="linkClass('/Bakery-Website/login')">Login</router-link>
+              <router-link @click="closeMenu" to="/Bakery-Website/register" :class="linkClass('/Bakery-Website/register')">Register</router-link>
+            </template>
+            <template v-else>
+              <router-link @click="closeMenu" to="/Bakery-Website/profile" :class="linkClass('/Bakery-Website/profile')">Profile</router-link>
+              <button
+                @click="requestLogout"
+                :class="[linkBase, 'text-left text-stone-800 hover:bg-red-500 hover:text-white active:bg-red-500 active:text-white']">
+                Logout
+              </button>
+            </template>
 
-        <router-link @click="closeMenu" to="/Bakery-Website/checkout">
-          <button class="w-full bg-wabi-moss text-white py-3.5 rounded-full font-bold mt-2">Check Out</button>
-        </router-link>
-      </div>
-    </transition>
+            <router-link
+              @click="closeMenu"
+              to="/Bakery-Website/checkout"
+              class="menu-item block text-center bg-wabi-moss text-white py-3.5 rounded-full font-bold mt-2 hover:bg-stone-800 active:bg-stone-800 transition-all duration-300 ease-out">
+              Check Out
+            </router-link>
+          </div>
+        </div>
+      </transition>
+    </Teleport>
 
     <!-- Logout confirmation -->
+    <Teleport to="body">
     <ConfirmModal
       :show="showLogoutConfirm"
       title="Log Out?"
@@ -150,6 +191,7 @@ const confirmLogout = () => {
       @confirm="confirmLogout"
       @cancel="showLogoutConfirm = false"
     />
+    </Teleport>
   </nav>
 </template>
 
@@ -162,4 +204,35 @@ const confirmLogout = () => {
   opacity: 0;
   transform: translateY(-10px);
 }
+
+/* Animation for the centered mobile menu */
+.menu-enter-active, .menu-leave-active {
+  transition: opacity 0.25s ease;
+}
+.menu-enter-active .menu-panel, .menu-leave-active .menu-panel {
+  transition: transform 0.25s ease;
+}
+.menu-enter-from, .menu-leave-to {
+  opacity: 0;
+}
+.menu-enter-from .menu-panel, .menu-leave-to .menu-panel {
+  transform: scale(0.95) translateY(8px);
+}
+
+/* Menu items glide in one after another */
+.menu-enter-active .menu-item {
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+}
+.menu-enter-from .menu-item {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.menu-enter-active .menu-item:nth-child(1) { transition-delay: 80ms; }
+.menu-enter-active .menu-item:nth-child(2) { transition-delay: 120ms; }
+.menu-enter-active .menu-item:nth-child(3) { transition-delay: 160ms; }
+.menu-enter-active .menu-item:nth-child(4) { transition-delay: 200ms; }
+.menu-enter-active .menu-item:nth-child(5) { transition-delay: 240ms; }
+.menu-enter-active .menu-item:nth-child(6) { transition-delay: 280ms; }
+.menu-enter-active .menu-item:nth-child(7) { transition-delay: 320ms; }
+.menu-enter-active .menu-item:nth-child(8) { transition-delay: 360ms; }
 </style>

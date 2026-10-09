@@ -62,13 +62,13 @@ const filteredProducts = computed(() => {
                     <h3 class="hidden lg:flex items-center gap-2 font-black text-stone-900 uppercase tracking-widest text-sm mb-6">
                     <SlidersHorizontal class="w-4 h-4" /> Categories
                     </h3>
-                    <div class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:block lg:space-y-3">
+                    <div class="flex gap-2 overflow-x-auto scroll-smooth pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:pb-0 lg:block lg:space-y-3">
                     <button v-for="cat in categories" :key="cat" 
                             @click="selectedCategory = cat"
                             :class="selectedCategory === cat
                                 ? 'bg-wabi-moss text-white font-bold lg:bg-transparent lg:text-wabi-moss lg:translate-x-2'
-                                : 'bg-stone-100 text-stone-600 lg:bg-transparent lg:text-stone-500'"
-                            class="shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-sm lg:text-base lg:p-0 lg:rounded-none lg:block transition-all lg:hover:text-wabi-moss">
+                                : 'bg-stone-100 text-stone-600 hover:bg-wabi-moss/15 hover:text-wabi-moss active:bg-wabi-moss active:text-white lg:bg-transparent lg:text-stone-500 lg:hover:bg-transparent lg:hover:text-wabi-moss lg:active:bg-transparent lg:active:text-wabi-moss lg:hover:translate-x-1'"
+                            class="shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-sm lg:text-base lg:p-0 lg:rounded-none lg:block transition-all duration-300 ease-out">
                         {{ cat }}
                     </button>
                     </div>
@@ -85,7 +85,8 @@ const filteredProducts = computed(() => {
                      into a grid that can toggle between 2 and 4 columns. -->
                 <div class="flex-1">
                     <p class="lg:hidden text-xs text-stone-500 mb-4">Orders placed after 2pm are baked and shipped the next morning.</p>
-                    <div :class="['grid gap-3 sm:gap-6 md:gap-8 transition-all duration-500 grid-cols-2', 
+                    <transition name="fade-grid" mode="out-in">
+                    <div :key="selectedCategory + sortBy" :class="['grid gap-3 sm:gap-6 md:gap-8 grid-cols-2', 
                         viewColumns === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3 xl:grid-cols-4'
                     ]">
                         <div v-for="product in filteredProducts" :key="product.id" 
@@ -97,8 +98,6 @@ const filteredProducts = computed(() => {
                                     {{ product.tag }}
                                 </span>
                                 <img :src="product.image" :alt="product.name"
-                                    @load="console.log('Image loaded:', product.image)"
-                                    @error="console.error('Image failed:', product.image)"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                             </div>
 
@@ -106,8 +105,8 @@ const filteredProducts = computed(() => {
                             <div class="space-y-1.5 sm:space-y-2 px-1 sm:px-2">
                                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5">
                                     <h3 class="text-sm sm:text-xl font-bold text-stone-800 leading-snug">{{ product.name }}</h3>
+                                    <span class="text-wabi-moss font-bold text-sm sm:text-base">${{ product.price.toFixed(2) }}</span>
                                 </div>
-                                <span class="text-wabi-moss font-bold text-sm sm:text-base">${{ product.price.toFixed(2) }}</span>
                                 <p class="text-xs sm:text-sm text-stone-500 leading-relaxed line-clamp-2 sm:line-clamp-none">
                                     {{ product.description }}
                                 </p>
@@ -120,6 +119,7 @@ const filteredProducts = computed(() => {
                             </div>
                         </div>
                     </div>
+                    </transition>
 
                     <!-- Empty State If No Product -->
                     <div v-if="productState.loading" class="text-center py-20">
@@ -137,3 +137,20 @@ const filteredProducts = computed(() => {
         </div>
     </div>
 </template>
+
+<style scoped>
+/* Smooth swap of the product grid when the category or sort changes */
+.fade-grid-enter-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.fade-grid-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-grid-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.fade-grid-leave-to {
+  opacity: 0;
+}
+</style>
