@@ -35,8 +35,8 @@ const confirmLogout = () => {
 </script>
 
 <template>
-  <nav class="sticky top-6 z-50 flex items-center justify-between px-8 py-3 mx-auto w-[90%] max-w-5xl bg-white/60 backdrop-blur-md rounded-full border border-stone-200/50 shadow-[0_20px_40px_-15px_rgba(93,112,82,0.12)]">
-    <div class="font-serif text-2xl font-bold text-wabi-moss">WabiSabi Home</div>
+  <nav class="sticky top-3 sm:top-6 z-50 flex items-center justify-between px-4 sm:px-8 py-3 mt-3 sm:mt-0 mx-auto w-[92%] sm:w-[90%] max-w-5xl bg-white/60 backdrop-blur-md rounded-full border border-stone-200/50 shadow-[0_20px_40px_-15px_rgba(93,112,82,0.12)]">
+    <div class="font-serif text-xl sm:text-2xl font-bold text-wabi-moss whitespace-nowrap">OvalisRoom</div>
 
     <div class="hidden md:flex items-center gap-8 font-medium text-stone-600">
         <router-link to="/Bakery-Website/" class="hover:text-wabi-moss transition-colors">
@@ -52,7 +52,7 @@ const confirmLogout = () => {
             Reviews
         </router-link>
     </div>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2 sm:gap-4">
       <router-link to="/Bakery-Website/checkout" class="relative cursor-pointer text-stone-600 hover:text-wabi-moss transition-colors mr-2">
         <ShoppingBag class="w-6 h-6" />
         <span class="absolute -top-2 -right-2 bg-wabi-moss text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
@@ -102,24 +102,24 @@ const confirmLogout = () => {
 
     <!-- Mobile Dropdown List -->
     <transition name="slide">
-      <div v-if="isMenuOpen" class="absolute top-20 left-0 w-full bg-white/95 backdrop-blur-lg rounded-3xl border border-stone-200 shadow-xl p-8 flex flex-col gap-6 md:hidden z-40">
-        <router-link @click="closeMenu" to="/Bakery-Website/" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Home</router-link>
-        <router-link @click="closeMenu" to="/Bakery-Website/shop" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Order Now</router-link>
-        <router-link @click="closeMenu" to="/Bakery-Website/ingredients" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Our Ingredients</router-link>
-        <router-link @click="closeMenu" to="/Bakery-Website/reviews" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Reviews</router-link>
-        <hr class="border-stone-100" />
+      <div v-if="isMenuOpen" class="absolute top-[4.5rem] left-0 w-full max-h-[calc(100dvh-7rem)] overflow-y-auto bg-white/95 backdrop-blur-lg rounded-3xl border border-stone-200 shadow-xl p-4 flex flex-col gap-1 md:hidden z-40">
+        <router-link @click="closeMenu" to="/Bakery-Website/" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Home</router-link>
+        <router-link @click="closeMenu" to="/Bakery-Website/shop" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Order Now</router-link>
+        <router-link @click="closeMenu" to="/Bakery-Website/ingredients" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Our Ingredients</router-link>
+        <router-link @click="closeMenu" to="/Bakery-Website/reviews" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Reviews</router-link>
+        <hr class="border-stone-100 my-2" />
 
         <template v-if="!isLoggedIn">
-          <router-link @click="closeMenu" to="/Bakery-Website/login" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Login</router-link>
-          <router-link @click="closeMenu" to="/Bakery-Website/register" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Register</router-link>
+          <router-link @click="closeMenu" to="/Bakery-Website/login" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Login</router-link>
+          <router-link @click="closeMenu" to="/Bakery-Website/register" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Register</router-link>
         </template>
         <template v-else>
-          <router-link @click="closeMenu" to="/Bakery-Website/profile" class="text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Profile</router-link>
-          <button @click="requestLogout" class="text-left text-xl font-bold text-stone-800 px-6 py-4 rounded-2xl transition-all hover:bg-red-50 hover:text-red-500 active:scale-95">Logout</button>
+          <router-link @click="closeMenu" to="/Bakery-Website/profile" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Profile</router-link>
+          <button @click="requestLogout" class="text-left text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-red-50 hover:text-red-500 active:scale-95">Logout</button>
         </template>
 
         <router-link @click="closeMenu" to="/Bakery-Website/checkout">
-          <button class="w-full bg-wabi-moss text-white py-4 rounded-full font-bold">Check Out</button>
+          <button class="w-full bg-wabi-moss text-white py-3.5 rounded-full font-bold mt-2">Check Out</button>
         </router-link>
       </div>
     </transition>

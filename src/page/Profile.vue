@@ -62,7 +62,7 @@ const formatDate = (iso) =>
 </script>
 
 <template>
-  <div class="pt-32 pb-20 px-6 min-h-screen bg-[#FDFCFB]">
+  <div class="pt-10 md:pt-32 pb-16 md:pb-20 px-4 sm:px-6 min-h-screen bg-[#FDFCFB]">
     <div class="max-w-4xl mx-auto">
 
       <!-- Not logged in -->
@@ -80,7 +80,7 @@ const formatDate = (iso) =>
             </div>
             <div>
               <h1 class="text-2xl font-black text-stone-900">{{ currentUser.name }}</h1>
-              <p class="text-stone-500 text-sm">{{ currentUser.email }}</p>
+              <p class="text-stone-500 text-sm break-all">{{ currentUser.email }}</p>
             </div>
           </div>
           <button
@@ -92,17 +92,17 @@ const formatDate = (iso) =>
         </div>
 
         <!-- Tabs -->
-        <div class="flex gap-2 bg-stone-100 p-1 rounded-xl w-fit mb-10">
+        <div class="flex gap-1 sm:gap-2 bg-stone-100 p-1 rounded-xl w-full sm:w-fit mb-8 sm:mb-10">
           <button
             @click="activeTab = 'details'"
             :class="activeTab === 'details' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500'"
-            class="px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-all">
+            class="flex-1 sm:flex-none justify-center px-3 sm:px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-all">
             <User class="w-4 h-4" /> My Details
           </button>
           <button
             @click="activeTab = 'history'"
             :class="activeTab === 'history' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500'"
-            class="px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-all">
+            class="flex-1 sm:flex-none justify-center px-3 sm:px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-all">
             <Package class="w-4 h-4" /> Purchase History
           </button>
         </div>
@@ -111,7 +111,7 @@ const formatDate = (iso) =>
         <div v-if="activeTab === 'details'">
           <p v-if="saved" class="mb-4 text-sm font-bold text-wabi-moss">Profile updated.</p>
 
-        <div v-if="!editing" class="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div v-if="!editing" class="bg-white p-5 sm:p-8 rounded-[2rem] border border-stone-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="flex items-start gap-3">
             <User class="w-5 h-5 text-wabi-moss mt-1" />
             <div>
@@ -123,7 +123,7 @@ const formatDate = (iso) =>
             <Mail class="w-5 h-5 text-wabi-moss mt-1" />
             <div>
               <p class="text-xs font-bold uppercase tracking-widest text-stone-400">Email</p>
-              <p class="font-semibold text-stone-800">{{ currentUser.email }}</p>
+              <p class="font-semibold text-stone-800 break-all">{{ currentUser.email }}</p>
             </div>
           </div>
           <div class="flex items-start gap-3">
@@ -170,7 +170,7 @@ const formatDate = (iso) =>
         </div>
 
         <!-- Edit form -->
-        <form v-else @submit.prevent="saveProfile" class="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-5">
+        <form v-else @submit.prevent="saveProfile" class="bg-white p-5 sm:p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-5">
           <div>
             <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Full Name</label>
             <input v-model="form.name" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
@@ -187,7 +187,7 @@ const formatDate = (iso) =>
             <input v-model="form.phone" type="tel" required placeholder="0123456789" class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Date of Birth</label>
               <input v-model="form.dob" type="date" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
@@ -209,7 +209,7 @@ const formatDate = (iso) =>
             <input v-model="form.address" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">City</label>
               <input v-model="form.city" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
@@ -265,7 +265,7 @@ const formatDate = (iso) =>
             </div>
 
             <div class="space-y-2 border-t border-stone-100 pt-4">
-              <div v-for="item in order.items" :key="item.id" class="flex justify-between text-sm">
+              <div v-for="item in order.items" :key="item.id" class="flex justify-between gap-4 text-sm">
                 <span class="text-stone-600">{{ item.qty }} × {{ item.name }}</span>
                 <span class="font-semibold text-stone-800">${{ (item.price * item.qty).toFixed(2) }}</span>
               </div>

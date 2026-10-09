@@ -48,8 +48,8 @@ const handleRegister = async () => {
 </script>
 
 <template>
-  <div class="pt-32 pb-20 px-6 min-h-screen bg-[#FDFCFB] flex items-center justify-center">
-    <div class="w-full max-w-md bg-white p-8 md:p-10 rounded-[2.5rem] border border-stone-100 shadow-xl">
+  <div class="pt-10 md:pt-32 pb-16 md:pb-20 px-4 sm:px-6 min-h-screen bg-[#FDFCFB] flex items-center justify-center">
+    <div class="w-full max-w-md bg-white p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-stone-100 shadow-xl">
       <div class="text-center mb-8">
         <h1 class="text-3xl font-black text-stone-900 tracking-tight">
           Create <span class="text-wabi-moss italic font-serif font-medium">Account.</span>
@@ -88,7 +88,7 @@ const handleRegister = async () => {
             class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Date of Birth</label>
             <input
@@ -126,7 +126,7 @@ const handleRegister = async () => {
                 class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">City</label>
                 <input

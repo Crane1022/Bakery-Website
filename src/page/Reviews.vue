@@ -89,11 +89,11 @@ const submitReview = () => {
 </script>
 
 <template>
-  <div class="pt-32 pb-20 px-6 min-h-screen bg-[#FDFCFB]">
+  <div class="pt-10 md:pt-32 pb-16 md:pb-20 px-4 sm:px-6 min-h-screen bg-[#FDFCFB]">
     <div class="max-w-6xl mx-auto">
 
       <!-- Header -->
-      <div class="text-center mb-16 space-y-4 max-w-2xl mx-auto">
+      <div class="text-center mb-10 md:mb-16 space-y-4 max-w-2xl mx-auto">
         <span class="inline-block px-4 py-1.5 bg-wabi-moss/10 text-wabi-moss rounded-full text-sm font-bold tracking-wide uppercase">
           Loved By Many
         </span>
@@ -115,7 +115,7 @@ const submitReview = () => {
       </div>
 
       <!-- Leave a Review -->
-      <div class="mt-20 max-w-2xl mx-auto bg-stone-900 text-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl">
+      <div class="mt-14 md:mt-20 max-w-2xl mx-auto bg-stone-900 text-white p-6 sm:p-8 md:p-12 rounded-[2.5rem] shadow-2xl">
         <h2 class="text-2xl font-bold mb-2">Share Your Experience</h2>
         <p class="text-stone-400 text-sm mb-8">Tell other biscuit lovers what you thought.</p>
 

@@ -21,8 +21,8 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="pt-32 pb-20 px-6 min-h-screen bg-[#FDFCFB] flex items-center justify-center">
-    <div class="w-full max-w-md bg-white p-8 md:p-10 rounded-[2.5rem] border border-stone-100 shadow-xl">
+  <div class="pt-10 md:pt-32 pb-16 md:pb-20 px-4 sm:px-6 min-h-screen bg-[#FDFCFB] flex items-center justify-center">
+    <div class="w-full max-w-md bg-white p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-stone-100 shadow-xl">
       <div class="text-center mb-8">
         <h1 class="text-3xl font-black text-stone-900 tracking-tight">
           Welcome <span class="text-wabi-moss italic font-serif font-medium">Back.</span>

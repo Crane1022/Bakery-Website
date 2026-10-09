@@ -54,11 +54,11 @@ const ingredients = [
 </script>
 
 <template>
-  <div class="pt-32 pb-20 px-6 min-h-screen bg-[#FDFCFB]">
+  <div class="pt-10 md:pt-32 pb-16 md:pb-20 px-4 sm:px-6 min-h-screen bg-[#FDFCFB]">
     <div class="max-w-6xl mx-auto">
 
       <!-- Header -->
-      <div class="text-center mb-16 space-y-4 max-w-2xl mx-auto">
+      <div class="text-center mb-10 md:mb-16 space-y-4 max-w-2xl mx-auto">
         <span class="inline-block px-4 py-1.5 bg-wabi-moss/10 text-wabi-moss rounded-full text-sm font-bold tracking-wide uppercase">
           What Goes In
         </span>
@@ -80,7 +80,7 @@ const ingredients = [
       </div>
 
       <!-- Sourcing Note -->
-      <div class="mt-20 p-8 md:p-12 bg-wabi-moss/5 border border-wabi-moss/10 rounded-[2.5rem] text-center max-w-3xl mx-auto">
+      <div class="mt-14 md:mt-20 p-6 md:p-12 bg-wabi-moss/5 border border-wabi-moss/10 rounded-[2.5rem] text-center max-w-3xl mx-auto">
         <p class="text-stone-600 leading-relaxed">
           We work directly with small farms and cooperatives whenever we can. If an ingredient isn't organic or
           fair-trade, it's because we haven't found a source we trust yet — not because we cut corners.

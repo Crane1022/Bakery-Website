@@ -10,7 +10,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full">
+  <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full">
     <!-- Stars -->
     <div class="flex gap-1 mb-4">
       <Star

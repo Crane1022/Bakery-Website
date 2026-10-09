@@ -11,10 +11,10 @@ const { addToCart } = useCart()
 </script>
 
 <template>
-  <section id="products" class="py-24 px-6 bg-stone-50/30">
+  <section id="products" class="py-16 md:py-24 px-6 bg-stone-50/30">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
-      <div class="text-center mb-16 space-y-4">
+      <div class="text-center mb-10 md:mb-16 space-y-4">
         <h2 class="text-4xl md:text-5xl font-black text-stone-900 tracking-tight">
           Our Seasonal <span class="text-wabi-moss italic font-serif font-medium">Flavors</span>
         </h2>

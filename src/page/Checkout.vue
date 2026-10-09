@@ -76,13 +76,13 @@ const confirmPayment = async () => {
 </script>
 
 <template>
-  <section class="py-20 px-6 bg-[#FDFCFB] min-h-screen">
+  <section class="py-10 md:py-20 px-4 sm:px-6 bg-[#FDFCFB] min-h-screen">
     <div class="max-w-6xl mx-auto">
       <h1 class="text-4xl font-black text-stone-900 mb-10 tracking-tight">
         Your <span class="text-wabi-moss italic font-serif font-medium">Order</span>
       </h1>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
 
         <!-- Left Side: Item List -->
         <div class="lg:col-span-2 space-y-6">
@@ -92,22 +92,22 @@ const confirmPayment = async () => {
           </div>
 
           <div v-for="item in cart" :key="item.id"
-              class="flex flex-col sm:flex-row items-center justify-between bg-white p-6 rounded-3xl border border-stone-100 shadow-sm gap-4">
-            <div class="flex items-center gap-6 w-full sm:w-auto">
-              <img :src="item.image" class="w-20 h-20 object-cover rounded-2xl" />
+              class="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-4 sm:p-6 rounded-3xl border border-stone-100 shadow-sm gap-4">
+            <div class="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+              <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 object-cover rounded-2xl" />
               <div>
                 <h3 class="font-bold text-stone-800">{{ item.name }}</h3>
                 <p class="text-wabi-moss font-semibold">${{ item.price.toFixed(2) }}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center justify-between sm:justify-start gap-4 w-full sm:w-auto">
               <div class="flex items-center border border-stone-200 rounded-full px-3 py-1">
-                <button @click="updateQty(item.id, -1)" class="p-1 hover:text-wabi-moss"><Minus class="w-4 h-4"/></button>
+                <button @click="updateQty(item.id, -1)" class="p-2 hover:text-wabi-moss"><Minus class="w-4 h-4"/></button>
                 <span class="mx-4 font-bold text-stone-700 w-4 text-center">{{ item.qty }}</span>
-                <button @click="updateQty(item.id, 1)" class="p-1 hover:text-wabi-moss"><Plus class="w-4 h-4"/></button>
+                <button @click="updateQty(item.id, 1)" class="p-2 hover:text-wabi-moss"><Plus class="w-4 h-4"/></button>
               </div>
-              <button @click="removeItem(item.id)" class="text-stone-300 hover:text-red-400 transition-colors">
+              <button @click="removeItem(item.id)" class="p-2 text-stone-300 hover:text-red-400 transition-colors">
                 <Trash2 class="w-5 h-5" />
               </button>
             </div>
@@ -135,7 +135,7 @@ const confirmPayment = async () => {
 
         <!-- Right Side: Summary & Checkout -->
         <div class="lg:col-span-1">
-          <div class="bg-stone-900 text-white p-8 rounded-[2.5rem] sticky top-32 shadow-2xl">
+          <div class="bg-stone-900 text-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] lg:sticky lg:top-32 shadow-2xl">
             <h2 class="text-2xl font-bold mb-6">Summary</h2>
 
             <div class="space-y-4 border-b border-stone-700 pb-6">
