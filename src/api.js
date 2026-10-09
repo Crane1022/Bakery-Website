@@ -29,5 +29,7 @@ export const api = {
   me: (token) => post('me', { token }),                  // -> user
   updateProfile: (token, profile) => post('updateProfile', { token, ...profile }), // -> user
   createOrder: (token, order) => post('createOrder', { token, ...order }), // -> order
-  myOrders: (token) => post('myOrders', { token })       // -> [orders]
+  myOrders: (token) => post('myOrders', { token }),      // -> [orders]
+  getReviews: async () => unwrap(await fetch(API_URL + '?action=reviews')), // -> [reviews]
+  addReview: (token, review) => post('addReview', { token, ...review }) // -> { review, status }
 }
