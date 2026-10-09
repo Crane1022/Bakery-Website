@@ -14,6 +14,7 @@ import Profile from './page/Profile.vue'
 
 // Define the routes path
 const routes = [
+  { path: '/', redirect: '/Bakery-Website/' },
   { path: '/Bakery-Website/', component: Home },
   { path: '/Bakery-Website/shop', component: Shop },
   { path: '/Bakery-Website/checkout', component: Checkout },
