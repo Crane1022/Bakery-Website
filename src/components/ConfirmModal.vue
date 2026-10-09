@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   show: Boolean,
-  title: { type: String, default: 'Are you sure?' },
+  title: { type: String, default: 'Are you sure???' },
   message: { type: String, default: '' },
   confirmText: { type: String, default: 'Confirm' },
   cancelText: { type: String, default: 'Cancel' },

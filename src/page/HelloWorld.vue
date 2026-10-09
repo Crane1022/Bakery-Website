@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Menu, ShoppingBag } from 'lucide-vue-next'
-import BiscuitForm from '../components/Biscuit_Form.vue'
+// import BiscuitForm from '../components/Biscuit_Form.vue'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import Section_Home from '../components/Section_Home.vue'

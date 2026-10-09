@@ -1,6 +1,13 @@
 <script setup>
-import BiscuitForm from './Biscuit_Form.vue'
+// import BiscuitForm from './Biscuit_Form.vue'
+import { useRouter } from 'vue-router';
 import Product_List from './Product_List.vue';
+
+const router = useRouter();
+
+const goShop = () => {
+    router.push('/Bakery-Website/shop');
+};
 
 defineProps({
     images: Array
@@ -21,11 +28,11 @@ defineProps({
             </p>
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-4 sm:pt-8">
-                <button class="w-full sm:w-auto bg-wabi-moss text-white px-10 py-4 rounded-full font-bold shadow-lg hover:-translate-y-1 transition-transform">
-                Order Fresh Batch
+                <button @click="goShop" class="w-full sm:w-auto bg-wabi-moss text-white px-10 py-4 rounded-full font-bold shadow-lg hover:-translate-y-1 transition-transform">
+                    Order Fresh Batch
                 </button>
-                <button class="w-full sm:w-auto bg-transparent text-stone-700 border-2 border-stone-700 px-10 py-4 rounded-full font-bold hover:bg-stone-100 transition-all">
-                Explore
+                <button @click="goShop" class="w-full sm:w-auto bg-transparent text-stone-700 border-2 border-stone-700 px-10 py-4 rounded-full font-bold hover:bg-stone-100 transition-all">
+                    Explore
                 </button>
             </div>
         </div>
