@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ShoppingBag, Menu, X, User, LogOut } from 'lucide-vue-next'
 import { useCart } from '../store/cart'
 import { useAuth } from '../store/auth'
 import ConfirmModal from './ConfirmModal.vue'
+import logo from '../assets/Logo.png'
 
 // Track menu is Open
 const isMenuOpen = ref(false)
@@ -15,10 +16,21 @@ const showLogoutConfirm = ref(false)
 const { cartCount } = useCart()
 const { currentUser, isLoggedIn, logout } = useAuth()
 const router = useRouter()
+const route = useRoute()
 
 // Function to close menu when a link is clicked
 const closeMenu = () => {
   isMenuOpen.value = false
+}
+
+// Clicking Home (or the logo): if you're already on the home page,
+// router-link does nothing, so scroll back to the top ourselves.
+const goHome = () => {
+  closeMenu()
+  isAccountOpen.value = false
+  if (route.path === '/Bakery-Website/') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }
 
 const requestLogout = () => {
@@ -36,10 +48,13 @@ const confirmLogout = () => {
 
 <template>
   <nav class="sticky top-3 sm:top-6 z-50 flex items-center justify-between px-4 sm:px-8 py-3 mt-3 sm:mt-0 mx-auto w-[92%] sm:w-[90%] max-w-5xl bg-white/60 backdrop-blur-md rounded-full border border-stone-200/50 shadow-[0_20px_40px_-15px_rgba(93,112,82,0.12)]">
-    <div class="font-serif text-xl sm:text-2xl font-bold text-wabi-moss whitespace-nowrap">OvalisRoom</div>
+    <router-link to="/Bakery-Website/" @click="goHome" class="flex items-center gap-2 sm:gap-3">
+      <img :src="logo" alt="OvalisRoom logo" class="h-9 sm:h-10 w-auto rounded-lg object-contain mix-blend-multiply" />
+      <span class="font-serif text-xl sm:text-2xl font-bold text-wabi-moss whitespace-nowrap">OvalisRoom</span>
+    </router-link>
 
     <div class="hidden md:flex items-center gap-8 font-medium text-stone-600">
-        <router-link to="/Bakery-Website/" class="hover:text-wabi-moss transition-colors">
+        <router-link to="/Bakery-Website/" @click="goHome" class="hover:text-wabi-moss transition-colors">
             Home
         </router-link>
         <router-link to="/Bakery-Website/shop" class="hover:text-wabi-moss transition-colors">
@@ -103,7 +118,7 @@ const confirmLogout = () => {
     <!-- Mobile Dropdown List -->
     <transition name="slide">
       <div v-if="isMenuOpen" class="absolute top-[4.5rem] left-0 w-full max-h-[calc(100dvh-7rem)] overflow-y-auto bg-white/95 backdrop-blur-lg rounded-3xl border border-stone-200 shadow-xl p-4 flex flex-col gap-1 md:hidden z-40">
-        <router-link @click="closeMenu" to="/Bakery-Website/" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Home</router-link>
+        <router-link @click="goHome" to="/Bakery-Website/" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Home</router-link>
         <router-link @click="closeMenu" to="/Bakery-Website/shop" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Order Now</router-link>
         <router-link @click="closeMenu" to="/Bakery-Website/ingredients" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Our Ingredients</router-link>
         <router-link @click="closeMenu" to="/Bakery-Website/reviews" class="text-lg font-bold text-stone-800 px-5 py-3 rounded-2xl transition-all hover:bg-wabi-moss/10 hover:text-wabi-moss active:scale-95">Reviews</router-link>

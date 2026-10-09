@@ -73,19 +73,19 @@ defineProps({
                 Experience the honest taste of traditional recipes. Our biscuits are made with organic ingredients and a dash of mindfulness, perfect for your daily ritual.
             </p>
 
-            <div class="flex flex-wrap gap-4 pt-4">
-                <a href="#form" class="bg-wabi-moss text-white px-8 py-4 rounded-full font-bold shadow-lg hover:bg-stone-800 transition-all flex items-center gap-2">
+            <div class="flex flex-wrap justify-center gap-4 pt-4">
+                <a @click="goShop" class="bg-wabi-moss text-white px-8 py-4 rounded-full font-bold shadow-lg hover:bg-stone-800 transition-all flex items-center gap-2">
                 Start Your Order
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
                 </a>
-                <button class="px-8 py-4 rounded-full font-bold text-stone-700 border-2 border-stone-200 hover:bg-stone-50 transition-all">
+                <button @click="goShop" class="px-8 py-4 rounded-full font-bold text-stone-700 border-2 border-stone-200 hover:bg-stone-50 transition-all">
                 View Flavors
                 </button>
             </div>
 
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-4 sm:gap-6 pt-8 border-t border-stone-100">
+            <div class="flex flex-wrap justify-center gap-x-5 gap-y-4 sm:gap-6 pt-8 border-t border-stone-100">
                 <div class="text-center">
                 <p class="font-bold text-stone-800 text-xl">100%</p>
                 <p class="text-xs text-stone-500 uppercase font-bold">Natural</p>
