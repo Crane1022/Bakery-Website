@@ -27,6 +27,7 @@ export const api = {
   register: (user) => post('register', user),            // -> { token, user }
   login: ({ email, password }) => post('login', { email, password }), // -> { token, user }
   me: (token) => post('me', { token }),                  // -> user
+  updateProfile: (token, profile) => post('updateProfile', { token, ...profile }), // -> user
   createOrder: (token, order) => post('createOrder', { token, ...order }), // -> order
   myOrders: (token) => post('myOrders', { token })       // -> [orders]
 }

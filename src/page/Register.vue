@@ -6,6 +6,7 @@ import { useAuth } from '../store/auth'
 
 const name = ref('')
 const email = ref('')
+const phone = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const dob = ref('')
@@ -30,6 +31,7 @@ const handleRegister = async () => {
   const success = await register({
     name: name.value,
     email: email.value,
+    phone: phone.value,
     password: password.value,
     dob: dob.value,
     gender: gender.value,
@@ -73,6 +75,16 @@ const handleRegister = async () => {
             type="email"
             required
             placeholder="you@example.com"
+            class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Phone Number</label>
+          <input
+            v-model="phone"
+            type="tel"
+            required
+            placeholder="0123456789"
             class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
         </div>
 

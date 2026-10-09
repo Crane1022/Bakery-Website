@@ -1,12 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { User, Package, LogOut, Mail, Cake, VenetianMask, MapPin } from 'lucide-vue-next'
+import { User, Package, LogOut, Mail, Cake, VenetianMask, MapPin, Phone, Pencil } from 'lucide-vue-next'
 import { useAuth } from '../store/auth'
 import { useOrders } from '../store/orders'
 import ConfirmModal from '../components/ConfirmModal.vue'
 
-const { currentUser, logout } = useAuth()
+const { currentUser, logout, updateProfile, loading, error: authError } = useAuth()
 const { myOrders, ordersLoading, loadMyOrders } = useOrders()
 const router = useRouter()
 
@@ -14,6 +14,34 @@ onMounted(loadMyOrders) // fetch this user's orders from the Google Sheet
 
 const activeTab = ref('details') // 'details' | 'history'
 const showLogoutConfirm = ref(false)
+
+// ---- Edit profile ----
+const editing = ref(false)
+const saved = ref(false)
+const saveError = ref('')
+const form = ref({})
+
+const startEdit = () => {
+  const u = currentUser.value
+  form.value = {
+    name: u.name, phone: u.phone, dob: u.dob, gender: u.gender,
+    address: u.address, city: u.city, postcode: u.postcode, state: u.state
+  }
+  saved.value = false
+  saveError.value = ''
+  editing.value = true
+}
+
+const saveProfile = async () => {
+  saveError.value = ''
+  const ok = await updateProfile(form.value)
+  if (ok) {
+    editing.value = false
+    saved.value = true
+  } else {
+    saveError.value = authError.value
+  }
+}
 
 const requestLogout = () => {
   showLogoutConfirm.value = true
@@ -80,7 +108,10 @@ const formatDate = (iso) =>
         </div>
 
         <!-- My Details -->
-        <div v-if="activeTab === 'details'" class="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div v-if="activeTab === 'details'">
+          <p v-if="saved" class="mb-4 text-sm font-bold text-wabi-moss">Profile updated.</p>
+
+        <div v-if="!editing" class="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="flex items-start gap-3">
             <User class="w-5 h-5 text-wabi-moss mt-1" />
             <div>
@@ -93,6 +124,13 @@ const formatDate = (iso) =>
             <div>
               <p class="text-xs font-bold uppercase tracking-widest text-stone-400">Email</p>
               <p class="font-semibold text-stone-800">{{ currentUser.email }}</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <Phone class="w-5 h-5 text-wabi-moss mt-1" />
+            <div>
+              <p class="text-xs font-bold uppercase tracking-widest text-stone-400">Phone</p>
+              <p class="font-semibold text-stone-800">{{ currentUser.phone || '—' }}</p>
             </div>
           </div>
           <div class="flex items-start gap-3">
@@ -121,6 +159,89 @@ const formatDate = (iso) =>
               </p>
             </div>
           </div>
+          <div class="sm:col-span-2 pt-2">
+            <button
+              @click="startEdit"
+              class="flex items-center gap-2 px-5 py-3 rounded-full border border-stone-200 text-stone-700 font-bold text-sm hover:bg-wabi-moss hover:text-white hover:border-wabi-moss transition-all">
+              <Pencil class="w-4 h-4" />
+              Edit Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- Edit form -->
+        <form v-else @submit.prevent="saveProfile" class="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm space-y-5">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Full Name</label>
+            <input v-model="form.name" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Email</label>
+            <input :value="currentUser.email" type="email" disabled class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors bg-stone-50 text-stone-400 cursor-not-allowed" />
+            <p class="text-xs text-stone-400 mt-1">Email is your login, so it can't be changed here.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Phone Number</label>
+            <input v-model="form.phone" type="tel" required placeholder="0123456789" class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Date of Birth</label>
+              <input v-model="form.dob" type="date" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Gender</label>
+              <select v-model="form.gender" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors bg-white">
+                <option value="" disabled>Select</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Street Address</label>
+            <input v-model="form.address" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">City</label>
+              <input v-model="form.city" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Postcode</label>
+              <input v-model="form.postcode" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">State</label>
+            <input v-model="form.state" type="text" required class="w-full border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-wabi-moss transition-colors" />
+          </div>
+
+          <p v-if="saveError" class="text-sm text-red-500 font-medium">{{ saveError }}</p>
+
+          <div class="flex gap-3 pt-2">
+            <button
+              type="button"
+              @click="editing = false"
+              class="flex-1 py-3.5 rounded-full font-bold text-stone-700 border-2 border-stone-200 hover:bg-stone-50 transition-all">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              :disabled="loading"
+              class="flex-1 py-3.5 rounded-full font-bold text-white bg-wabi-moss hover:bg-opacity-90 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+              {{ loading ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
         </div>
 
         <!-- Purchase History -->

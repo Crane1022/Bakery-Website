@@ -56,6 +56,25 @@ async function run(request) {
 const register = (form) => run(() => api.register(form))
 const login = (form) => run(() => api.login(form))
 
+// Save edited details to the sheet, then refresh the user kept in the browser
+async function updateProfile(form) {
+  state.error = ''
+  state.loading = true
+
+  try {
+    const user = await api.updateProfile(state.token, form)
+    state.currentUser = user
+    localStorage.setItem(USER_KEY, JSON.stringify(user))
+    return true
+  } catch (err) {
+    state.error = err.message
+    if (/log in again/i.test(err.message)) logout()
+    return false
+  } finally {
+    state.loading = false
+  }
+}
+
 function logout() {
   state.token = ''
   state.currentUser = null
@@ -74,6 +93,7 @@ export function useAuth() {
     loading: computed(() => state.loading),
     register,
     login,
+    updateProfile,
     logout
   }
 }
