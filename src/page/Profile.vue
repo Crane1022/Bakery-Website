@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { User, Package, LogOut, Mail, Cake, VenetianMask, MapPin } from 'lucide-vue-next'
 import { useAuth } from '../store/auth'
@@ -7,8 +7,10 @@ import { useOrders } from '../store/orders'
 import ConfirmModal from '../components/ConfirmModal.vue'
 
 const { currentUser, logout } = useAuth()
-const { myOrders } = useOrders()
+const { myOrders, ordersLoading, loadMyOrders } = useOrders()
 const router = useRouter()
+
+onMounted(loadMyOrders) // fetch this user's orders from the Google Sheet
 
 const activeTab = ref('details') // 'details' | 'history'
 const showLogoutConfirm = ref(false)
@@ -123,7 +125,9 @@ const formatDate = (iso) =>
 
         <!-- Purchase History -->
         <div v-else class="space-y-6">
-          <div v-if="myOrders.length === 0" class="text-center py-20 bg-white rounded-3xl border border-dashed border-stone-300">
+          <p v-if="ordersLoading" class="text-center text-stone-400 italic py-10">Loading your orders...</p>
+
+          <div v-else-if="myOrders.length === 0" class="text-center py-20 bg-white rounded-3xl border border-dashed border-stone-300">
             <p class="text-stone-500 italic">You haven't placed any orders yet.</p>
             <router-link to="/Bakery-Website/shop" class="text-wabi-moss font-bold underline mt-4 inline-block">Start Shopping</router-link>
           </div>
@@ -132,7 +136,7 @@ const formatDate = (iso) =>
             <div class="flex justify-between items-start mb-4 flex-wrap gap-2">
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-stone-400">Order #{{ order.id }}</p>
-                <p class="text-sm text-stone-500">{{ formatDate(order.date) }} • Paid via {{ order.paymentMethod }}</p>
+                <p class="text-sm text-stone-500">{{ formatDate(order.date) }} • {{ order.paymentMethod ? 'Paid via ' + order.paymentMethod : 'Payment: ' + order.paymentStatus }}</p>
               </div>
               <span class="text-xs font-bold uppercase tracking-widest bg-wabi-moss/10 text-wabi-moss px-3 py-1 rounded-full">
                 {{ order.status }}

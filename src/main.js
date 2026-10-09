@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import './style.css'
 import App from './App.vue'
+import { loadProducts } from './store/products'
 import Home from './page/HelloWorld.vue'
 import Shop from './page/Shop.vue'
 import Checkout from './page/Checkout.vue'
@@ -34,5 +35,7 @@ const app = createApp(App)
 
 // THIS IS THE MISSING LINK:
 app.use(router) 
+
+loadProducts() // fetch the products from the Google Sheet
 
 app.mount('#app')

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { LayoutGrid, Columns2, Search, SlidersHorizontal } from 'lucide-vue-next'
-import { products, categories } from '../store/products'
+import { products, categories, productState } from '../store/products'
 import { useCart } from '../store/cart'
 
 const viewColumns = ref(4) // Default view
@@ -117,8 +117,14 @@ const filteredProducts = computed(() => {
                     </div>
 
                     <!-- Empty State If No Product -->
-                    <div v-if="filteredProducts.length === 0" class="text-center py-20">
-                        <p class="text-stone-400 italic font-serif">No biscuits found in this category...</p>
+                    <div v-if="productState.loading" class="text-center py-20">
+                        <p class="text-stone-400 italic font-serif">Loading our bakery...</p>
+                    </div>
+                    <div v-else-if="productState.error" class="text-center py-20">
+                        <p class="text-red-500 font-medium">{{ productState.error }}</p>
+                    </div>
+                    <div v-else-if="filteredProducts.length === 0" class="text-center py-20">
+                        <p class="text-stone-400 italic font-serif">No items found in this category...</p>
                     </div>
                 </div>
 

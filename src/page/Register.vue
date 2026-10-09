@@ -16,10 +16,10 @@ const postcode = ref('')
 const stateRegion = ref('')
 
 const localError = ref('')
-const { register, error } = useAuth()
+const { register, error, loading } = useAuth()
 const router = useRouter()
 
-const handleRegister = () => {
+const handleRegister = async () => {
   localError.value = ''
 
   if (password.value !== confirmPassword.value) {
@@ -27,7 +27,7 @@ const handleRegister = () => {
     return
   }
 
-  const success = register({
+  const success = await register({
     name: name.value,
     email: email.value,
     password: password.value,
@@ -171,9 +171,10 @@ const handleRegister = () => {
 
         <button
           type="submit"
-          class="w-full bg-wabi-moss text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all active:scale-95">
+          :disabled="loading"
+          class="w-full bg-wabi-moss text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
           <UserPlus class="w-4 h-4" />
-          Create Account
+          {{ loading ? 'Creating account...' : 'Create Account' }}
         </button>
       </form>
 

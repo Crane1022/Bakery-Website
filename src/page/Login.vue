@@ -7,12 +7,12 @@ import { useAuth } from '../store/auth'
 const email = ref('')
 const password = ref('')
 
-const { login, error } = useAuth()
+const { login, error, loading } = useAuth()
 const router = useRouter()
 const route = useRoute()
 
-const handleLogin = () => {
-  const success = login({ email: email.value, password: password.value })
+const handleLogin = async () => {
+  const success = await login({ email: email.value, password: password.value })
   if (success) {
     // send them back wherever they were headed (e.g. checkout), default to profile
     router.push(route.query.redirect || '/Bakery-Website/profile')
@@ -55,9 +55,10 @@ const handleLogin = () => {
 
         <button
           type="submit"
-          class="w-full bg-wabi-moss text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all active:scale-95">
+          :disabled="loading"
+          class="w-full bg-wabi-moss text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
           <LogIn class="w-4 h-4" />
-          Sign In
+          {{ loading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>
 

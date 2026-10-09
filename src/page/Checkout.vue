@@ -5,10 +5,11 @@ import { Plus, Minus, Trash2, CreditCard, Wallet, Landmark, Banknote, CheckCircl
 import { useCart } from '../store/cart'
 import { useAuth } from '../store/auth'
 import { useOrders } from '../store/orders'
+import { loadProducts } from '../store/products'
 
 // Shared cart state — same items added from Home, Shop, etc.
 const { items: cart, updateQty, removeItem, subtotal, clearCart } = useCart()
-const { currentUser, isLoggedIn } = useAuth()
+const { isLoggedIn } = useAuth()
 const { placeOrder } = useOrders()
 const router = useRouter()
 
@@ -51,21 +52,26 @@ const closeModal = () => {
   modalStep.value = 'closed'
 }
 
+const orderError = ref('')
+
 const confirmPayment = async () => {
+  orderError.value = ''
   modalStep.value = 'processing'
 
-  // Simulate a brief payment processing delay
-  await new Promise((resolve) => setTimeout(resolve, 1100))
+  try {
+    // The server checks the stock and works out the real total
+    await placeOrder({
+      items: cart.value.map((i) => ({ id: i.id, qty: i.qty })),
+      paymentMethod: selectedMethodLabel.value
+    })
 
-  placeOrder({
-    userId: currentUser.value.id,
-    items: cart.value.map((i) => ({ ...i })),
-    total: total.value,
-    paymentMethod: selectedMethodLabel.value
-  })
-
-  clearCart()
-  modalStep.value = 'done'
+    clearCart()
+    loadProducts() // stock changed, so refresh the product list
+    modalStep.value = 'done'
+  } catch (err) {
+    orderError.value = err.message
+    modalStep.value = 'confirm' // go back so the customer can read the error
+  }
 }
 </script>
 
@@ -216,6 +222,8 @@ const confirmPayment = async () => {
                   <span class="text-2xl font-black text-wabi-moss">${{ total.toFixed(2) }}</span>
                 </div>
               </div>
+
+              <p v-if="orderError" class="text-sm text-red-600 font-medium mb-4">{{ orderError }}</p>
 
               <div class="flex gap-3">
                 <button

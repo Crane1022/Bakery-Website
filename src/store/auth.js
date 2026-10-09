@@ -1,102 +1,66 @@
 import { reactive, computed } from 'vue'
+import { api } from '../api'
 
 // ---------------------------------------------------------------------------
-// WHERE THE "TEXT FILE" LIVES:
-// A browser app can't write to an arbitrary .txt file on your computer, so
-// this uses localStorage instead — it's the closest browser equivalent to a
-// text file: a small JSON blob saved on the visitor's own device.
-//
-// Open DevTools > Application tab > Local Storage > your site, and you'll see:
-//   wabisabi_users         -> every registered account (JSON array)
-//   wabisabi_current_user  -> whoever is currently logged in (JSON object)
+// Accounts now live in the "Users" tab of your Google Sheet.
+// The browser only keeps two small things in localStorage so you stay logged
+// in after a refresh:
+//   wabisabi_token         -> a signed login token from the server
+//   wabisabi_current_user  -> the user's name, email, address (never the password)
 // ---------------------------------------------------------------------------
 
-const USERS_KEY = 'wabisabi_users'
-const SESSION_KEY = 'wabisabi_current_user'
+const TOKEN_KEY = 'wabisabi_token'
+const USER_KEY = 'wabisabi_current_user'
 
-function loadUsers() {
+function loadUser() {
   try {
-    return JSON.parse(localStorage.getItem(USERS_KEY)) || []
-  } catch {
-    return []
-  }
-}
-
-function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users))
-}
-
-function loadSession() {
-  try {
-    return JSON.parse(localStorage.getItem(SESSION_KEY)) || null
+    return JSON.parse(localStorage.getItem(USER_KEY)) || null
   } catch {
     return null
   }
 }
 
+const savedToken = localStorage.getItem(TOKEN_KEY) || ''
+
 const state = reactive({
-  users: loadUsers(),
-  currentUser: loadSession(),
-  error: ''
+  token: savedToken,
+  // old sessions from the localStorage version have no token, so treat them as logged out
+  currentUser: savedToken ? loadUser() : null,
+  error: '',
+  loading: false
 })
 
-function setSession(user) {
-  // never keep the password in the active session object
-  const { password, ...safeUser } = user
-  state.currentUser = safeUser
-  localStorage.setItem(SESSION_KEY, JSON.stringify(safeUser))
+function setSession({ token, user }) {
+  state.token = token
+  state.currentUser = user
+  localStorage.setItem(TOKEN_KEY, token)
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
 }
 
-function register({ name, email, password, dob, gender, address, city, postcode, state: regionState }) {
+// Shared by login and register: show loading, save the session, catch errors
+async function run(request) {
   state.error = ''
+  state.loading = true
 
-  const emailTaken = state.users.some(
-    (u) => u.email.toLowerCase() === email.toLowerCase()
-  )
-  if (emailTaken) {
-    state.error = 'An account with this email already exists.'
+  try {
+    setSession(await request())
+    return true
+  } catch (err) {
+    state.error = err.message
     return false
+  } finally {
+    state.loading = false
   }
-
-  const newUser = {
-    id: Date.now(),
-    name,
-    email,
-    password, // NOTE: demo only — never store plain-text passwords in a real backend
-    dob,
-    gender,
-    address,
-    city,
-    postcode,
-    state: regionState
-  }
-
-  state.users.push(newUser)
-  saveUsers(state.users)
-  setSession(newUser)
-  return true
 }
 
-function login({ email, password }) {
-  state.error = ''
-
-  const user = state.users.find(
-    (u) =>
-      u.email.toLowerCase() === email.toLowerCase() && u.password === password
-  )
-
-  if (!user) {
-    state.error = 'Incorrect email or password.'
-    return false
-  }
-
-  setSession(user)
-  return true
-}
+const register = (form) => run(() => api.register(form))
+const login = (form) => run(() => api.login(form))
 
 function logout() {
+  state.token = ''
   state.currentUser = null
-  localStorage.removeItem(SESSION_KEY)
+  localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(USER_KEY)
 }
 
 const isLoggedIn = computed(() => !!state.currentUser)
@@ -104,8 +68,10 @@ const isLoggedIn = computed(() => !!state.currentUser)
 export function useAuth() {
   return {
     currentUser: computed(() => state.currentUser),
+    token: computed(() => state.token),
     isLoggedIn,
     error: computed(() => state.error),
+    loading: computed(() => state.loading),
     register,
     login,
     logout
